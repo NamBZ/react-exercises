@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter App</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function Header({ children }) {
+        return (
+          <header>
+            <h1>{children}</h1>
+          </header>
+        );
+      }
+
+      function Main() {
+        return (
+          <main>
+            <Counter />
+          </main>
+        );
+      }
+
+      function Footer() {
+        return (
+          <footer className="section">
+            <span>&copy; NamPT.Me</span>
+          </footer>
+        );
+      }
+
+      function App() {
+        return (
+          <>
+            <Header>Counter App</Header>
+            <Main />
+            <Footer />
+          </>
+        );
+      }
+
+      function Counter() {
+        const [count, setCount] = React.useState(0);
+
+        const increment = () => setCount(count + 1);
+        const decrement = () => setCount(count - 1);
+        const reset = () => setCount(0);
+
+        return (
+          <div className="section">
+            <h2
+              className={`text-${
+                count > 0 ? "success" : count < 0 ? "danger" : "primary"
+              }`}
+            >
+              {count}
+            </h2>
+            <div className="alert alert-info">
+              <p>{count > 0 ? "Positive" : count < 0 ? "Negative" : "Zero"}</p>
+            </div>
+
+            <div>
+              <button onClick={increment}>Increment</button>&nbsp;
+              <button onClick={decrement}>Decrement</button>&nbsp;
+              <button onClick={reset}>Reset</button>
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

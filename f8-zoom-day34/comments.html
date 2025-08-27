@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comment System</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      let uniqId = 0;
+      function Header({ children }) {
+        return (
+          <header>
+            <h1>{children}</h1>
+          </header>
+        );
+      }
+
+      function Main() {
+        return (
+          <main>
+            <CommentSystem />
+          </main>
+        );
+      }
+
+      function Footer() {
+        return (
+          <footer className="section">
+            <span>&copy; NamPT.Me</span>
+          </footer>
+        );
+      }
+
+      function App() {
+        return (
+          <>
+            <Header>Comment System</Header>
+            <Main />
+            <Footer />
+          </>
+        );
+      }
+
+      function CommentSystem() {
+        const [comments, setComments] = React.useState([]);
+        const [loading, setLoading] = React.useState(true);
+        const [newComment, setNewComment] = React.useState("");
+
+        function addComment(comment) {
+          // Send API nếu có
+          setComments([comment, ...comments]);
+        }
+
+        // Function to generate random past timestamp
+        const generateRandomTime = () => {
+          const now = new Date();
+          const randomOffset = Math.floor(Math.random() * 5); // 0, 1, 2, 3, or 4
+
+          switch (randomOffset) {
+            case 0: // seconds ago
+              return new Date(now - Math.floor(Math.random() * 300) * 1000); // 0-5 minutes ago
+            case 1: // hours ago
+              return new Date(
+                now - Math.floor(Math.random() * 24) * 3600 * 1000
+              ); // 0-24 hours ago
+            case 2: // days ago
+              return new Date(
+                now - Math.floor(Math.random() * 7) * 24 * 3600 * 1000
+              ); // 0-7 days ago
+            case 3: // weeks ago
+              return new Date(
+                now - Math.floor(Math.random() * 4) * 7 * 24 * 3600 * 1000
+              ); // 0-4 weeks ago
+            case 4: // months ago
+              return new Date(
+                now - Math.floor(Math.random() * 12) * 30 * 24 * 3600 * 1000
+              ); // 0-12 months ago
+          }
+        };
+
+        React.useEffect(() => {
+          fetch("https://jsonplaceholder.typicode.com/comments?_limit=10")
+            .then((res) => res.json())
+            .then((data) => {
+              // Add timestamp to each comment
+              const commentsWithTime = data
+                .map((comment) => ({
+                  ...comment,
+                  timestamp: generateRandomTime(),
+                }))
+                .sort((a, b) => b.timestamp - a.timestamp);
+              setComments(commentsWithTime);
+              setTimeout(() => {
+                setLoading(false);
+              }, 500);
+
+              uniqId = Math.max(...data.map((comment) => comment.id), 0);
+            });
+        }, []);
+
+        return (
+          <div className="section">
+            <CommentForm addComment={addComment} />
+            <CommentList comments={comments} loading={loading} />
+          </div>
+        );
+      }
+
+      function CommentList({ comments, loading }) {
+        if (loading) {
+          return (
+            <div className="loading-spinner">
+              <svg width="50" height="50" viewBox="0 0 50 50">
+                <circle
+                  cx="25"
+                  cy="25"
+                  r="20"
+                  fill="none"
+                  stroke="#1b995e"
+                  strokeWidth="4"
+                  strokeDasharray="60 30"
+                >
+                  <animateTransform
+                    attributeName="transform"
+                    attributeType="XML"
+                    type="rotate"
+                    from="0 25 25"
+                    to="360 25 25"
+                    dur="1s"
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              </svg>
+            </div>
+          );
+        }
+
+        return (
+          <div className="comment-list">
+            {comments.map((comment) => (
+              <CommentView key={comment.id} comment={comment} />
+            ))}
+          </div>
+        );
+      }
+
+      function CommentView({ comment }) {
+        const name = comment.name.split(" ").slice(0, 2).join("+");
+        const avatarUrl = `https://ui-avatars.com/api/?name=${name}&background=random`;
+
+        function formatTimeAgo(timestamp) {
+          const now = new Date();
+          const seconds = Math.floor((now - timestamp) / 1000);
+
+          if (seconds < 60) {
+            if (seconds < 5) return "just now";
+            return seconds === 1 ? "1 second ago" : `${seconds} seconds ago`;
+          }
+
+          const minutes = Math.floor(seconds / 60);
+          if (minutes < 60) {
+            return minutes === 1 ? "1 minute ago" : `${minutes} minutes ago`;
+          }
+
+          const hours = Math.floor(minutes / 60);
+          if (hours < 24) {
+            return hours === 1 ? "1 hour ago" : `${hours} hours ago`;
+          }
+
+          const days = Math.floor(hours / 24);
+          if (days < 7) {
+            return days === 1 ? "1 day ago" : `${days} days ago`;
+          }
+
+          const weeks = Math.floor(days / 7);
+          if (weeks < 4) {
+            return weeks === 1 ? "1 week ago" : `${weeks} weeks ago`;
+          }
+          const months = Math.floor(days / 30);
+          if (months < 3) {
+            return months === 1 ? "1 month ago" : `${months} months ago`;
+          }
+
+          // For timestamps older than 2 months, display the actual date
+          return timestamp.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        }
+
+        return (
+          <div className="comment">
+            <div className="comment-header">
+              <img src={avatarUrl} alt={comment.name} className="avatar" />
+              <div className="comment-info">
+                <h4>{comment.name}</h4>
+                <p className="email">{comment.email}</p>
+                <span className="time">{formatTimeAgo(comment.timestamp)}</span>
+              </div>
+            </div>
+            <p className="comment-body">{comment.body}</p>
+          </div>
+        );
+      }
+
+      // Thêm form để add comment
+      function CommentForm({ addComment }) {
+        const [name, setName] = React.useState("");
+        const [email, setEmail] = React.useState("");
+        const [body, setBody] = React.useState("");
+        const [errors, setErrors] = React.useState({});
+
+        function validate() {
+          const newErrors = {};
+          if (!name.trim()) {
+            newErrors.name = "Name is required";
+          } else if (name.trim().length < 4 || name.trim().length > 255) {
+            newErrors.name = "Name must be between 4 and 255 characters";
+          }
+          if (!email.trim()) {
+            newErrors.email = "Email is required";
+          } else if (email.trim().length < 4 || email.trim().length > 255) {
+            newErrors.email = "Email must be between 4 and 255 characters";
+          } else if (
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email.trim())
+          ) {
+            newErrors.email = "Invalid email address";
+          }
+          if (!body.trim()) {
+            newErrors.body = "Comment is required";
+          } else if (body.trim().length < 15) {
+            newErrors.body = "Comment must be at least 15 characters";
+          } else if (/https?:\/\/|www\./i.test(body.trim())) {
+            newErrors.body = "Comment must not contain links";
+          }
+          return newErrors;
+        }
+
+        const handleSubmit = (e) => {
+          e.preventDefault();
+          const newErrors = validate();
+          setErrors(newErrors);
+          if (Object.keys(newErrors).length === 0) {
+            addComment({
+              id: ++uniqId,
+              name: name,
+              email: email,
+              body: body,
+              timestamp: new Date(),
+            });
+            setBody("");
+            setName("");
+            setEmail("");
+            setErrors({});
+          }
+        };
+
+        return (
+          <form className="comment-form" onSubmit={handleSubmit} noValidate>
+            <div className="form-group">
+              <input
+                type="text"
+                value={name}
+                placeholder="Your Name"
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+              {errors.name && <div className="text-danger">{errors.name}</div>}
+            </div>
+            <div className="form-group">
+              <input
+                type="email"
+                value={email}
+                placeholder="Your Email"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+              {errors.email && (
+                <div className="text-danger">{errors.email}</div>
+              )}
+            </div>
+            <div className="form-group">
+              <textarea
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                placeholder="Add a comment..."
+                required
+              />
+              {errors.body && <div className="text-danger">{errors.body}</div>}
+            </div>
+            <button type="submit">Submit</button>
+          </form>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

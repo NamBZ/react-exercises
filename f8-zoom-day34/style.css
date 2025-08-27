@@ -1,0 +1,360 @@
+* {
+  box-sizing: border-box;
+}
+html {
+  font-family: "Jost", sans-serif;
+}
+body {
+  margin: 0;
+}
+header {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  margin: 3rem auto;
+  border-radius: 10px;
+  padding: 1rem;
+  background-color: #58004d;
+  color: white;
+  text-align: center;
+  width: 90%;
+  max-width: 40rem;
+}
+#root ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+#root .section {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  margin: 1rem auto;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  width: 90%;
+  max-width: 40rem;
+}
+#root h2 {
+  font-size: 2rem;
+  border-bottom: 4px solid #ccc;
+  color: #58004d;
+  margin: 0 0 1rem 0;
+}
+#root button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #ff0077;
+  background-color: #ff0077;
+  color: white;
+  padding: 0.5rem 1.25rem;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.26);
+  border-radius: 0.25rem;
+}
+#root button:hover,
+#root button:active {
+  background-color: #ec3169;
+  border-color: #ec3169;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
+}
+#root input,
+#root select,
+#root textarea {
+  font: inherit;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+#root label {
+  font-weight: bold;
+  margin-right: 1rem;
+  width: 7rem;
+  display: inline-block;
+}
+#root form div {
+  margin: 1rem 0;
+}
+#root a {
+  color: blue;
+  text-decoration: none;
+}
+.alert-success {
+  background-color: #e8f5e9;
+  border-color: #4caf50;
+  color: #43a047;
+}
+.alert-success hr {
+  border-top-color: #449d48;
+}
+.alert-success .alert-link {
+  color: #347c37;
+}
+.alert-info {
+  background-color: #e0f7fa;
+  border-color: #00bcd4;
+  color: #00838f;
+}
+.alert-info hr {
+  border-top-color: #00a5bb;
+}
+.alert-info .alert-link {
+  color: #00545c;
+}
+.alert-warning {
+  background-color: #fff3e0;
+  border-color: #ff9800;
+  color: #ef6c00;
+}
+.alert-warning hr {
+  border-top-color: #e68900;
+}
+.alert-warning .alert-link {
+  color: #bc5500;
+}
+.alert-danger {
+  background-color: #fbe9e7;
+  border-color: #ff5722;
+  color: #d84315;
+}
+.alert-danger hr {
+  border-top-color: #ff4408;
+}
+.alert-danger .alert-link {
+  color: #aa3510;
+}
+.alert-primary hr {
+  border-top-color: #187bd1;
+}
+.alert-primary .alert-link {
+  color: #104d92;
+}
+.alert-primary,
+.alert-primary .close {
+  color: #104d92;
+}
+.alert-success,
+.alert-success .close {
+  color: #205823;
+}
+.alert-info,
+.alert-info .close {
+  color: #00545c;
+}
+.alert-warning,
+.alert-warning .close {
+  color: #aa3510;
+}
+.alert-danger,
+.alert-danger .close {
+  color: #9c1f1f;
+}
+/* Alert Text Colors */
+.text-success {
+  color: #43a047 !important;
+}
+.text-danger {
+  color: #d84315 !important;
+}
+.text-primary {
+  color: #686868 !important;
+}
+/* Todo App */
+.my-lists ul {
+  list-style: none;
+  margin: 1rem 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.my-lists li {
+  padding: 0.5rem;
+  color: #1f1f1f;
+  text-align: left;
+  border-bottom: 1px solid #00545c;
+}
+
+.my-lists li:first-child {
+  border-bottom: none;
+}
+
+.my-lists li span.remove {
+  color: #ff0077;
+  cursor: pointer;
+  float: right;
+}
+
+.todo-input input:focus {
+  outline: none;
+  border-color: #1b995e;
+  background-color: #d7fdeb;
+}
+/* Products Grid & Card */
+#root .products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+}
+#root .product-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+  text-align: left;
+  position: relative;
+}
+#root .product-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #58004d;
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+#root .product-body {
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+#root .product-id {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+#root .product-btn {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #ff0077;
+  background-color: #ff0077;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 0.25rem;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.18);
+}
+#root .product-btn:hover {
+  background-color: #ec3169;
+  border-color: #ec3169;
+}
+/* Modal */
+#root .modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+#root .modal-content {
+  background: #fff;
+  border-radius: 10px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.22);
+  position: relative;
+}
+#root .modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  color: #ff0077;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Comment System */
+#root .comment-list {
+  margin: 2rem 0 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+#root .comment {
+  background: #f8f8fa;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 1.25rem 1.5rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+#root .comment-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+#root .avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+#root .comment-info {
+  flex: 1;
+}
+#root .comment-info h4 {
+  margin: 0 0 0.2rem 0;
+  font-size: 1.1rem;
+  color: #58004d;
+}
+#root .comment-info .email {
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 0.2rem;
+}
+#root .comment-info .time {
+  font-size: 0.85rem;
+  color: #1b995e;
+}
+#root .comment-body {
+  font-size: 1.05rem;
+  color: #222;
+  margin: 0.5rem 0 0 0;
+  line-height: 1.6;
+}
+
+#root .comment-form {
+  background: #f3f3f7;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+  max-width: 40rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+#root .comment-form .form-group {
+  margin-bottom: 1rem;
+}
+#root .comment-form input,
+#root .comment-form textarea {
+  width: 100%;
+  font: inherit;
+  padding: 0.6rem;
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
+  margin-top: 0.2rem;
+  box-sizing: border-box;
+  background: #fff;
+  transition: border-color 0.2s, background 0.2s;
+}
+#root .comment-form input:focus,
+#root .comment-form textarea:focus {
+  outline: none;
+  border-color: #1b995e;
+  background: #e6fbe6;
+}
+#root .comment-form button {
+  margin-top: 0.5rem;
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.7rem;
+}

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List App</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      let uniqId = 0;
+      function Header() {
+        return (
+          <header>
+            <h1>Todo List App</h1>
+          </header>
+        );
+      }
+
+      function Main() {
+        return (
+          <main>
+            <TodoList />
+          </main>
+        );
+      }
+
+      function Footer() {
+        return (
+          <footer className="section">
+            <span>&copy; NamPT.Me</span>
+          </footer>
+        );
+      }
+
+      function App() {
+        return (
+          <>
+            <Header />
+            <Main />
+            <Footer />
+          </>
+        );
+      }
+
+      function TodoList() {
+        const [todos, setTodos] = React.useState([]);
+
+        const addTodo = (text) => {
+          if (text.trim()) {
+            setTodos([
+              ...todos,
+              { id: uniqId++, text: text.trim(), completed: false },
+            ]);
+          }
+        };
+
+        const removeTodo = (id) => {
+          setTodos(todos.filter((todo) => todo.id !== id));
+        };
+
+        const toggleCompleted = (id) => {
+          setTodos(
+            todos.map((todo) =>
+              todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            )
+          );
+        };
+
+        return (
+          <div className="section">
+            <h2>My List</h2>
+
+            <TodoStats todos={todos} />
+            <div>
+              <TodoInput inputValue="" addTodo={addTodo} />
+            </div>
+            <div className="my-lists">
+              <ul>
+                {todos.map((todo) => (
+                  <TodoItem
+                    key={todo.id}
+                    todo={todo}
+                    removeTodo={removeTodo}
+                    toggleCompleted={toggleCompleted}
+                  />
+                ))}
+                {todos.length === 0 && (
+                  <li style={{ textAlign: "center" }}>
+                    No todos have been added yet - please start adding some!
+                  </li>
+                )}
+              </ul>
+            </div>
+          </div>
+        );
+      }
+
+      function TodoInput({ inputValue, addTodo }) {
+        const [text, setText] = React.useState(inputValue);
+        return (
+          <form
+            className="todo-input"
+            onSubmit={(e) => {
+              e.preventDefault();
+              addTodo(text);
+              setText("");
+            }}
+          >
+            <input
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            <button type="submit">Add Todo</button>
+          </form>
+        );
+      }
+
+      function TodoItem({ todo, removeTodo, toggleCompleted }) {
+        return (
+          <li>
+            <input
+              id={`todo-${todo.id}`}
+              type="checkbox"
+              checked={todo.completed}
+              onChange={() =>
+                typeof toggleCompleted === "function"
+                  ? toggleCompleted(todo.id)
+                  : null
+              }
+            />
+            <label
+              htmlFor={`todo-${todo.id}`}
+              style={{
+                textDecoration: todo.completed ? "line-through" : "none",
+              }}
+            >
+              {todo.text}
+            </label>
+            <span className="remove" onClick={() => removeTodo(todo.id)}>
+              x
+            </span>
+          </li>
+        );
+      }
+
+      function TodoStats({ todos }) {
+        const total = todos.length;
+        const completed = todos.filter((todo) => todo.completed).length;
+        const remaining = total - completed;
+        return (
+          <div className="todo-stats">
+            <p>
+              Total Todos: {total} | Completed: {completed} | Remaining:
+              {remaining}
+            </p>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

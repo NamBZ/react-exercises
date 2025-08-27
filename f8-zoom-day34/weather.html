@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function Header({ children }) {
+        return (
+          <header>
+            <h1>{children}</h1>
+          </header>
+        );
+      }
+
+      function Main() {
+        return (
+          <main>
+            <WeatherSystem />
+          </main>
+        );
+      }
+
+      function Footer() {
+        return (
+          <footer className="section">
+            <span>&copy; NamPT.Me</span>
+          </footer>
+        );
+      }
+
+      function App() {
+        return (
+          <>
+            <Header>Weather App</Header>
+            <Main />
+            <Footer />
+          </>
+        );
+      }
+
+      // Data fake
+      const weatherData = {
+        hanoi: { city: "Hanoi", temp: 28, weather: "Sunny", humidity: 65 },
+        hcm: {
+          city: "Ho Chi Minh City",
+          temp: 32,
+          weather: "Cloudy",
+          humidity: 78,
+        },
+        danang: {
+          city: "Da Nang",
+          temp: 30,
+          weather: "Light Rain",
+          humidity: 82,
+        },
+      };
+      const weatherIcons = {
+        Sunny: "☀️",
+        Cloudy: "⛅",
+        "Light Rain": "🌦️",
+        Rain: "🌧️",
+        Storm: "🌩️",
+        Snow: "❄️",
+      };
+
+      function WeatherSystem() {
+        const [selected, setSelected] = React.useState("hanoi");
+        const [data, setData] = React.useState(weatherData);
+
+        const handleChange = (e) => {
+          setSelected(e.target.value);
+        };
+
+        const handleRefresh = () => {
+          setData((prev) => {
+            const newData = { ...prev };
+            Object.keys(newData).forEach((key) => {
+              // Generate a more extreme temperature range (0-50°C)
+              // Sometimes generate extreme temperatures
+              let newTemp;
+              const extremeChance = Math.random();
+
+              if (extremeChance > 0.9) {
+                newTemp = Math.floor(Math.random() * 11) + 40;
+              } else if (extremeChance > 0.8) {
+                newTemp = Math.floor(Math.random() * 6);
+              } else {
+                newTemp = Math.max(
+                  0,
+                  Math.min(
+                    50,
+                    newData[key].temp + Math.floor(Math.random() * 11) - 5
+                  )
+                );
+              }
+
+              // Random humidity (more variation)
+              const newHumidity = Math.max(
+                0,
+                Math.min(
+                  100,
+                  newData[key].humidity + Math.floor(Math.random() * 21) - 10
+                )
+              );
+
+              // Choose weather type based on temperature
+              let possibleWeatherTypes;
+              if (newTemp >= 40) {
+                possibleWeatherTypes = ["Sunny"];
+              } else if (newTemp >= 30) {
+                possibleWeatherTypes = ["Sunny", "Cloudy"];
+              } else if (newTemp >= 20) {
+                possibleWeatherTypes = ["Sunny", "Cloudy", "Light Rain"];
+              } else if (newTemp >= 10) {
+                possibleWeatherTypes = ["Cloudy", "Light Rain", "Rain"];
+              } else if (newTemp >= 0) {
+                possibleWeatherTypes = ["Cloudy", "Rain", "Storm"];
+              } else {
+                possibleWeatherTypes = ["Snow", "Storm"];
+              }
+
+              // Random weather type from possible options
+              const newWeather =
+                possibleWeatherTypes[
+                  Math.floor(Math.random() * possibleWeatherTypes.length)
+                ];
+
+              newData[key] = {
+                ...newData[key],
+                temp: newTemp,
+                humidity: newHumidity,
+                weather: newWeather,
+              };
+            });
+            return newData;
+          });
+        };
+
+        const city = data[selected];
+        const icon = weatherIcons[city.weather] || "🌡️";
+
+        return (
+          <div className="weather-card section">
+            <div className="weather-title">Weather Information</div>
+            <select
+              className="weather-select"
+              value={selected}
+              onChange={handleChange}
+            >
+              <option value="hanoi">Hanoi</option>
+              <option value="hcm">Ho Chi Minh City</option>
+              <option value="danang">Da Nang</option>
+            </select>
+            <div className="weather-icon">{icon}</div>
+            <div className="weather-info">
+              <b>City:</b> {city.city}
+            </div>
+            <div className="weather-info">
+              <b>Temperature:</b> {city.temp}°C
+            </div>
+            <div className="weather-info">
+              <b>Weather:</b> {city.weather}
+            </div>
+            <div className="weather-info">
+              <b>Humidity:</b> {city.humidity}%
+            </div>
+            <button className="weather-refresh" onClick={handleRefresh}>
+              Refresh
+            </button>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
